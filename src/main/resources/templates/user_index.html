@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户列表 - QAdmin后台模板</title>
+    <link rel="stylesheet" href="/common/layui/css/layui.css">
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <script src="/common/layui/layui.js"></script>
+    <script src="/common/jquery-3.3.1.min.js"></script>
+    <script src="/common/vue.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!--顶栏-->
+        <header>
+            <h1 v-text="webname"></h1>
+            <div class="breadcrumb">
+                <i class="layui-icon">&#xe715;</i>
+                <ul>
+                    <li v-for="vo in address">
+                        <a v-text="vo.name" :href="vo.url"></a> <span>/</span>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="main" id="app">
+            <!--左栏-->
+            <div class="left">
+                <ul class="cl">
+                    <!--顶级分类-->
+                    <li v-for="vo,index in menu" :class="{hidden:vo.hidden}">
+                        <a href="javascript:;" :class="{active:vo.active}" @click="onActive(index)">
+                            <i class="layui-icon" v-html="vo.icon"></i>
+                            <span v-text="vo.name"></span>
+                            <i class="layui-icon arrow" v-show="vo.url.length==0">&#xe61a;</i> <i v-show="vo.active"
+                                class="layui-icon active">&#xe623;</i>
+                        </a>
+                        <!--子级分类-->
+                        <div v-for="vo2,index2 in vo.list">
+                            <a href="javascript:;" :class="{active:vo2.active}" @click="onActive(index,index2)"
+                                v-text="vo2.name"></a>
+                            <i v-show="vo2.active" class="layui-icon active">&#xe623;</i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!--右侧-->
+            <div class="right">
+
+
+                <div class="layui-row">
+                    <div class="layui-col-lg4" style="text-align: right">
+
+                        <div class="layui-input-inline" style="width: 300px">
+                            <input type="text" name="k" value="" placeholder="手机/用户名/邮箱/昵称" class="layui-input key">
+                        </div>
+                        <button type="button" class="layui-btn sou">搜索</button>
+                    </div>
+                </div>
+
+                <table id="demo" lay-filter="test" class="layui-table layui-form"></table>
+
+                <script>
+                    layui.use('table', function () {
+                        var table = layui.table;
+
+                        //第一个实例
+                        table.render({
+                            elem: '#demo'
+                            , height: 312
+                            , url: '/data/data.json' //数据接口
+                            , page: true //开启分页
+                            , cols: [
+                                [ //表头
+                                { field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left' }
+                                , { field: 'username', title: '用户名', width: 80 }
+                                , { field: 'sex', title: '性别', width: 80, sort: true }
+                                , { field: 'city', title: '城市', width: 80 }
+                                , { field: 'sign', title: '签名', width: 177 }
+                                , { field: 'status', title: '状态', width: 80, sort: true }
+                                , { field: 'Ctime', title: '时间', sort: true }
+                                , { field: 'Ltime', title: '时间' }
+                                
+                            ]
+                            ]
+                        });
+
+                    });
+                </script>
+
+
+                <div class="page">
+                    <ul class="pagination">
+                        <li class="disabled"><span>&laquo;</span></li>
+                        <li class="active"><span>1</span></li>
+                        <li><a href="?/admin/user/index.html?page=2">2</a></li>
+                        <li><a href="?/admin/user/index.html?page=3">3</a></li>
+                        <li><a href="?/admin/user/index.html?page=4">4</a></li>
+                        <li><a href="?/admin/user/index.html?page=5">5</a></li>
+                        <li><a href="?/admin/user/index.html?page=6">6</a></li>
+                        <li><a href="?/admin/user/index.html?page=7">7</a></li>
+                        <li><a href="?/admin/user/index.html?page=8">8</a></li>
+                        <li class="disabled"><span>...</span></li>
+                        <li><a href="?/admin/user/index.html?page=109">109</a></li>
+                        <li><a href="?/admin/user/index.html?page=110">110</a></li>
+                        <li><a href="?/admin/user/index.html?page=2">&raquo;</a></li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <script src="/admin/js/config.js"></script>
+    <script src="/admin/js/script.js"></script>
+</body>
+
+</html>

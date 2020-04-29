@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台首页 - QAdmin后台模板</title>
+    <link rel="stylesheet" href="/common/layui/css/layui.css">
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <script src="/common/layui/layui.js"></script>
+    <script src="/common/jquery-3.3.1.min.js"></script>
+    <script src="/common/vue.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js" ></script>
+    <script src="https://cdn.bootcss.com/lodash.js/3.5.0/lodash.min.js" ></script>
+    <link href="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.js"></script>
+
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <style type="text/css">
+        .pl-20 {
+            padding-left: 20px
+        }
+
+        text {
+            cursor: pointer;
+            max-width: 25px;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+
+        circle {
+            cursor: pointer;
+        }
+
+        #graphcontainerdiv {
+            background: #fff;
+        }
+
+        .el-color-picker__panel {
+            left: 812px !important;
+        }
+
+        .wange-toolbar {
+            border: 1px solid #ccc;
+        }
+
+        .wangeditor-form {
+            border: 1px solid #ccc;
+            height: 350px;
+            min-height: 340px
+        }
+
+        .mind-fj-box {
+            display: inline-block;
+            width: 290px;
+            padding: 5px;
+            border: 1px solid #e6e6e6;
+            box-shadow: 0 0 8px rgba(206, 205, 201, .38);
+        }
+
+        .mind-fj-p {
+            color: #666;
+            line-height: 24px;
+            padding: 5px;
+            background: rgba(255, 255, 255, .85);
+        }
+
+        .mind-carousel + .mind-fj-p .el-scrollbar__wrap {
+            height: auto;
+            max-height: 220px;
+            min-height: 0;
+        }
+
+        .carous-img {
+            height: 100%;
+            background: rgba(0, 0, 0, .10);
+            line-height: 197px;
+            text-align: center;
+        }
+
+        .carous-img img {
+            max-width: 100%;
+            max-height: 100%;
+            line-height: 197px;
+            vertical-align: middle;
+        }
+
+        .circle_opreate {
+            display: none;
+        }
+
+        .node_detail {
+            position: absolute;
+            width: 100%;
+            line-height: 35px;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            padding-bottom: 10px;
+            background: rgba(198, 226, 255, 0.2);
+            display: none;
+        }
+
+        .node_pd {
+            padding: 4px;
+            font-size: 13px;
+            font-family: -webkit-body;
+            font-weight: 600;
+        }
+
+        .operatetips {
+            position: absolute;
+            right: 10px;
+            float: right;
+            top: 0;
+            width: 220px;
+            padding: 30px;
+            border: 2px #EE7942 solid;
+            border-radius: 4px;
+        }
+
+        .jsoncontainer {
+            position: absolute;
+            right: 30%;
+            float: right;
+            top: 0;
+            width: 60%;
+            height: 60%;
+            padding: 30px;
+            border: 2px #EE7942 solid;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .cypher_toolbar {
+            line-height: 70px;
+            height: 85px;
+            padding: 0 22px;
+            border-bottom: 1px solid #ededed;
+        }
+
+        .link {
+            fill: none;
+            stroke: #660f05;
+            stroke-width: 1.5px;
+        }
+    </style>
+    
+</head>
+<body>
+<div id="app">
+    <!--顶栏-->
+    <header>
+        <h1 v-text="webname"></h1>
+        <div class="breadcrumb">
+            <i class="layui-icon">&#xe715;</i>
+            <ul>
+                <li v-for="vo in address">
+                    <a  v-text="vo.name" :href="vo.url" ></a> <span>/</span>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="main" id="app">
+         <!--左栏-->
+         <div class="left">
+            <ul class="cl" >
+                <!--顶级分类-->
+                <li v-for="vo,index in menu" :class="{hidden:vo.hidden}">
+                    <a href="javascript:;"  :class="{active:vo.active}"  @click="onActive(index)">
+                        <i class="layui-icon" v-html="vo.icon"></i>
+                        <span v-text="vo.name"></span>
+                        <i class="layui-icon arrow" v-show="vo.url.length==0">&#xe61a;</i> <i v-show="vo.active" class="layui-icon active">&#xe623;</i>
+                    </a>
+                    <!--子级分类-->
+                    <div v-for="vo2,index2 in vo.list">
+                        <a href="javascript:;" :class="{active:vo2.active}" @click="onActive(index,index2)" v-text="vo2.name"></a>
+                        <i v-show="vo2.active" class="layui-icon active">&#xe623;</i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--右侧-->
+        <div class="right">
+            <div id="graphcontainer" class="graphcontainer"></div>
+
+
+            
+            
+            <el-dialog id="editform" title="属性编辑" :visible.sync="isedit" width="30%">
+                
+                        <el-form :model="graphEntity">
+                            <el-form-item label="节点名称" label-width="120px">
+                                <el-input v-model="graphEntity.name" style="width:240px"></el-input>
+                            </el-form-item>
+                            <el-form-item label="选择颜色" label-width="120px"> 
+                                <el-color-picker id="colorpicker"
+                                                 v-model="graphEntity.color" :predefine="predefineColors">
+                                </el-color-picker>
+                            </el-form-item>
+                            
+                        </el-form>
+                
+                <div slot="footer" class="dialog-footer">
+                    <el-button v-show="propactiveName=='propimage'" type="primary" @click="savenodeimage"
+                               class="btn-line cur">保存
+                    </el-button>
+                    <el-button v-show="propactiveName=='richtextedit'" @click="savenodecontent" type="primary"
+                               class="btn-line cur">保存
+                    </el-button>
+                    <el-button v-show="propactiveName=='propedit'&&graphEntity.uuid!=0" type="primary"
+                               @click="createnode">更新
+                    </el-button>
+                    <el-button v-show="propactiveName=='propedit'&&graphEntity.uuid==0" type="primary"
+                               @click="createnode">创建
+                    </el-button>
+                    <el-button @click="resetsubmit">取消</el-button>
+                </div>
+            </el-dialog>
+           
+            <!-- 底部over -->
+        </div>
+        <!-- 右侧over -->
+        <!-- 空白处右键 -->
+        <ul class="el-dropdown-menu el-popper blankmenubar" id="blank_menubar" style="display: none;">
+            <li class="el-dropdown-menu__item" @click="btnaddsingle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-jiedian"></use>
+                </svg>
+                <span class="pl-15">添加节点</span>
+            </li>
+            <li class="el-dropdown-menu__item" @click="btnquickaddnode">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-add-rd"></use>
+                </svg>
+                <span class="pl-15">快速添加</span>
+            </li>
+        </ul>
+        <!-- 连线按钮组 -->
+        <ul class="el-dropdown-menu el-popper linkmenubar" id="link_menubar" style="display: none;">
+            <li class="el-dropdown-menu__item" @click="updatelinkName">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-editor"></use>
+                </svg>
+                <span class="pl-15">编辑</span>
+            </li>
+            <li class="el-dropdown-menu__item" @click="deletelink">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-shanchu"></use>
+                </svg>
+                <span class="pl-15">删除</span>
+            </li>
+        </ul>
+        
+
+        <el-dialog id="batchcreateform" :title="operatenameformat(operatetype)" :visible.sync="isbatchcreate"
+                       width="30%">
+                <div v-show="operatetype==1" class="mb-l">添加同级</div>
+                <div v-show="operatetype==2" class="mb-l">添加下级</div>
+                <div v-show="operatetype==3" class="mb-l">批量添加</div>
+                <div v-show="operatetype==4" class="mb-l">段落识别</div>
+                <div class="mb-r">
+                    <div v-show="operatetype!=2" class="mb-m">
+                        <div class="mb-label">源节点名称</div>
+                        <div class="mb-con">
+                            <el-input v-model="batchcreate.sourcenodename"></el-input>
+                            <span v-show="operatetype==3" class="mb-label">（只能添加一个）</span>
+                            <span v-show="operatetype==1" class="mb-label">（多个以英文逗号隔开）</span>
+                        </div>
+                        <div class="mb-label" v-show="operatetype!==1">关系</div>
+                        <div class="mb-con" v-show="operatetype!==1">
+                            <el-input v-model="batchcreate.relation"></el-input>
+                            <div class="mb-label">（只能添加一个）</div>
+                        </div>
+                    </div>
+                    <div v-show="operatetype!=1" class="mb-m">
+                        <div class="mb-label">子节点名称</div>
+                        <div class="mb-con">
+                            <el-input v-model="batchcreate.targetnodenames"></el-input>
+                            <span class="mb-label " v-show="operatetype==3">（多个以英文逗号隔开,可不填）</span>
+                            <span class="mb-label " v-show="operatetype==2">（多个以英文逗号隔开）</span>
+                        </div>
+                    </div>
+                    <div class="mb-m tc">
+                        <el-button v-show="operatetype==1" type="primary" @click="batchcreatesamenode">确定</el-button>
+                        <el-button v-show="operatetype==2" type="primary" @click="batchcreatechildnode">确定</el-button>
+                        <el-button v-show="operatetype==3" type="primary" @click="batchcreatenode">确定</el-button>
+                        <el-button @click="resetsubmit">取消</el-button>
+                    </div>
+                </div>
+            </el-dialog>
+
+        </div>
+    </div>
+</div>
+<script src="/admin/js/config.js"></script>
+<script src="/admin/js/script.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js" ></script>
+</body>
+</html>
