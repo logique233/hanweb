@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>管理员登陆 - QAdmin后台模板</title>
+    <title>管理员登陆 </title>
     <link rel="stylesheet" href="/common/layui/css/layui.css">
     <link rel="stylesheet" href="/admin/css/login.css">
     <script src="/common/layui/layui.js"></script>
@@ -13,7 +13,7 @@
 
 <body id="login">
 <div class="login">
-    <h2>QAdmin后台模板</h2>
+    <h2>ADMIN后台</h2>
     <form class="layui-form" method="post" target="_blank" action="">
         <div class="layui-form-item">
             <input type="username" name="user" placeholder="用户名" class="layui-input">
@@ -40,11 +40,6 @@
                 layer = layui.layer,
                 $ = layui.jquery;
 
-
-            layer.tips('无需输入,请点击登录进入后台<br/>这个tips可随时去除!', '.layui-btn', {
-                tips: [3, '#333'],
-                time: 0
-            });
 
             form.on('submit(login)', function (data) {
                 sessionStorage.isLgoin = 1; //模拟登录状态,实际使用时请删除掉

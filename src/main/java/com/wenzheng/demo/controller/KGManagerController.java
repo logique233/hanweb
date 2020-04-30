@@ -1,11 +1,9 @@
 package com.wenzheng.demo.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.csvreader.CsvWriter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wenzheng.demo.config.WebAppConfig;
+
 import com.wenzheng.demo.entity.QAEntityItem;
 import com.wenzheng.demo.query.GraphQuery;
 import com.wenzheng.demo.service.IKGGraphService;
@@ -37,39 +35,12 @@ public class KGManagerController extends BaseController {
     @Autowired
     private Neo4jUtil neo4jUtil;
     @Autowired
-    private WebAppConfig config;
-    @Autowired
     private IKGGraphService KGGraphService;
     @Autowired
     private IKnowledgegraphService kgservice;
 
 
-    @CrossOrigin
-    @ResponseBody
-    @RequestMapping(value = "/getgraph") // call db.labels
-    public R<GraphPageRecord<Map<String, Object>>> getgraph(GraphQuery queryItem) {
-        R<GraphPageRecord<Map<String, Object>>> result = new R<GraphPageRecord<Map<String, Object>>>();
-        GraphPageRecord<Map<String, Object>> resultRecord = new GraphPageRecord<Map<String, Object>>();
-        try {
-            String name = "tc";
-            PageHelper.startPage(queryItem.getPageIndex(), queryItem.getPageSize(), true);
-            List<Map<String, Object>> domainList = kgservice.getDomainList(queryItem.getDomain(), name);
-            PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(domainList);
-            long total = pageInfo.getTotal();
-            resultRecord.setPageIndex(queryItem.getPageIndex());
-            resultRecord.setPageSize(queryItem.getPageSize());
-            resultRecord.setTotalCount(new Long(total).intValue());
-            resultRecord.setNodeList(pageInfo.getList());
-            result.code = 200;
-            result.setData(resultRecord);
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.code = 500;
-            result.setMsg("服务器错误");
-        }
 
-        return result;
-    }
 
     @ResponseBody
     @RequestMapping(value = "/getdomaingraph")
@@ -404,49 +375,7 @@ public class KGManagerController extends BaseController {
         return result;
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/importgraph")
-    public JSONObject importgraph(@RequestParam(value = "file", required = true) MultipartFile file,
-                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
-        JSONObject res = new JSONObject();
-        if (file == null) {
-            res.put("code", "500");
-            res.put("msg", "请先选择有效的文件");
-            return res;
-        }
-        // 领域不能为空
-        String label = request.getParameter("domain");
-        if (StringUtil.isBlank(label)) {
-            res.put("code", "500");
-            res.put("msg", "请先选择领域");
-            return res;
-        }
-        List<Map<String, Object>> dataList = getFormatData(file);
-        try {
-            List<List<String>> list = new ArrayList<>();
-            for (Map<String, Object> item : dataList) {
-                List<String> lst = new ArrayList<>();
-                lst.add(item.get("sourcenode").toString());
-                lst.add(item.get("targetnode").toString());
-                lst.add(item.get("relationship").toString());
-                list.add(lst);
-            }
-            String savePath = config.getLocation();
-            String filename = "tc" + System.currentTimeMillis() + ".csv";
-            CSVUtil.createCsvFile(list, savePath, filename);
-            String serverUrl = request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-            String csvUrl = "http://" + serverUrl + "/download/" + filename;
-            //String csvUrl = "https://neo4j.com/docs/cypher-manual/3.5/csv/artists.csv";
-            KGGraphService.batchInsertByCSV(label, csvUrl, 0);
-            res.put("code", 200);
-            res.put("message", "success!");
-            return res;
-        } catch (Exception e) {
-            res.put("code", 500);
-            res.put("message", "服务器错误!");
-        }
-        return res;
-    }
+
 
     private List<Map<String, Object>> getFormatData(MultipartFile file) throws Exception {
         List<Map<String, Object>> mapList = new ArrayList<>();
@@ -512,99 +441,9 @@ public class KGManagerController extends BaseController {
         return mapList;
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/exportgraph")
-    public JSONObject exportgraph(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        JSONObject res = new JSONObject();
-        String label = request.getParameter("domain");
-        String filePath = config.getLocation();
-        String fileName = UUID.randomUUID() + ".csv";
-        String fileUrl = filePath + File.separator + fileName;
-        String cypher = String.format(
-                "MATCH (n:%s) -[r]->(m:%s) return n.name as source,m.name as target,r.name as relation", label, label);
-        List<HashMap<String, Object>> list = neo4jUtil.GetGraphItem(cypher);
-        File file = new File(fileUrl);
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                System.out.println("文件不存在，新建成功！");
-            } else {
-                System.out.println("文件存在！");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        CsvWriter csvWriter = new CsvWriter(fileUrl, ',', StandardCharsets.UTF_8);
-        String[] header = {"source", "target", "relation"};
-        csvWriter.writeRecord(header);
-        for (HashMap<String, Object> hashMap : list) {
-            int colSize = hashMap.size();
-            String[] cntArr = new String[colSize];
-            cntArr[0] = hashMap.get("source").toString().replace("\"", "");
-            cntArr[1] = hashMap.get("target").toString().replace("\"", "");
-            cntArr[2] = hashMap.get("relation").toString().replace("\"", "");
-            try {
-                csvWriter.writeRecord(cntArr);
-            } catch (IOException e) {
-//                log.error("CSVUtil->createFile: 文件输出异常" + e.getMessage());
-            }
-        }
-        csvWriter.close();
-        String serverUrl = request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-        String csvUrl = serverUrl + "/kg/download/" + fileName;
-        res.put("code", 200);
-        res.put("csvurl", csvUrl);
-        res.put("message", "success!");
-        return res;
 
-    }
 
-    // 文件下载相关代码
-    @GetMapping(value = "/download/{filename}")
-    public String download(@PathVariable("filename") String filename, HttpServletRequest request,
-                           HttpServletResponse response) {
-        String filePath = config.getLocation();
-        String fileUrl = filePath + filename;
-        if (fileUrl != null) {
-            File file = new File(fileUrl);
-            if (file.exists()) {
-                //response.setContentType("application/force-download");// 设置强制下载不打开
-                response.addHeader("Content-Disposition", "attachment;fileName=" + filename + ".csv");// 设置文件名
-                byte[] buffer = new byte[1024];
-                FileInputStream fis = null;
-                BufferedInputStream bis = null;
-                try {
-                    fis = new FileInputStream(file);
-                    bis = new BufferedInputStream(fis);
-                    OutputStream os = response.getOutputStream();
-                    int i = bis.read(buffer);
-                    while (i != -1) {
-                        os.write(buffer, 0, i);
-                        i = bis.read(buffer);
-                    }
-                    System.out.println("success");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (bis != null) {
-                        try {
-                            bis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (fis != null) {
-                        try {
-                            fis.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
+
 
     @ResponseBody
     @RequestMapping(value = "/getnodeimage")

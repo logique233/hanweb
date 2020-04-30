@@ -18,7 +18,7 @@ var vue = new Vue({
         address: [],
         svg: null,
         // timer: null,
-        contextRoot: 'http://127.0.0.1:8080/',
+        contextRoot: '/',
         editor: null,
         simulation: null,
         linkGroup: null,
@@ -446,7 +446,7 @@ var vue = new Vue({
             $.ajax({
                 data: data,
                 type: "POST",
-                url: contextRoot + "getrelationnodecount",
+                url: this.contextRoot + "getrelationnodecount",
                 success: function (result) {
                     if (result.code == 200) {
                         _this.selectnode.name = node.name;
@@ -468,7 +468,7 @@ var vue = new Vue({
             $.ajax({
                 data: data,
                 type: "POST",
-                url: contextRoot + "getmorerelationnode",
+                url: this.contextRoot + "getmorerelationnode",
                 success: function (result) {
                     if (result.code == 200) {
                         var newnodes = result.data.node;
@@ -527,7 +527,7 @@ var vue = new Vue({
                 $.ajax({
                     data: data,
                     type: "POST",
-                    url: contextRoot + "deletedomain",
+                    url: this.contextRoot + "deletedomain",
                     success: function (result) {
                         if (result.code == 200) {
                             _this.getlabels();
@@ -892,7 +892,7 @@ var vue = new Vue({
                 data: data,
                 type: "POST",
                 traditional: true,
-                url: contextRoot + "createnode",
+                url: this.contextRoot + "createnode",
                 success: function (result) {
                     if (result.code == 200) {
                         if (_this.graphEntity.uuid != 0) {
@@ -924,7 +924,7 @@ var vue = new Vue({
                 data: data,
                 type: "POST",
                 traditional: true,
-                url: contextRoot + "createnode",
+                url: this.contextRoot + "createnode",
                 success: function (result) {
                     if (result.code == 200) {
                         d3.select('.graphcontainer').style("cursor", "");
@@ -1021,18 +1021,18 @@ var vue = new Vue({
             var fx = d.fx;
             var fy = d.fy;
             var ajaxdata = { domain: domain, uuid: uuid, fx: fx, fy: fy };
-            // $.ajax({
-            //     data: ajaxdata,
-            //     type: "POST",
-            //     url: this.contextRoot + "updateCorrdOfNode",
-            //     success: function (result) {
-            //         if (result.code == 200) {
-            //         }
-            //     },
-            //     error: function (XMLHttpRequest, textStatus, errorThrown) {
-            //         alert(errorThrown)
-            //     }
-            // });
+            $.ajax({
+                data: ajaxdata,
+                type: "POST",
+                url: this.contextRoot + "updateCorrdOfNode",
+                success: function (result) {
+                    if (result.code == 200) {
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown)
+                }
+            });
         },
         drawnode(node) {
             var _this = this;
@@ -1573,7 +1573,7 @@ var vue = new Vue({
             $.ajax({
                 data: data,
                 type: "POST",
-                url: contextRoot + "batchcreatenode",
+                url: this.contextRoot + "batchcreatenode",
                 success: function (result) {
                     if (result.code == 200) {
                         _this.isbatchcreate = false;
@@ -1617,7 +1617,7 @@ var vue = new Vue({
             $.ajax({
                 data: data,
                 type: "POST",
-                url: contextRoot + "batchcreatechildnode",
+                url: this.contextRoot + "batchcreatechildnode",
                 success: function (result) {
                     if (result.code == 200) {
                         _this.isbatchcreate = false;
@@ -1656,7 +1656,7 @@ var vue = new Vue({
             $.ajax({
                 data: data,
                 type: "POST",
-                url: contextRoot + "batchcreatesamenode",
+                url: this.contextRoot + "batchcreatesamenode",
                 success: function (result) {
                     if (result.code == 200) {
                         _this.isbatchcreate = false;
