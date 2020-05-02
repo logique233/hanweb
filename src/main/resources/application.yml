@@ -9,11 +9,15 @@ spring:
     username: neo4j
     password: logic
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/know?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hanweb?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
     username: root
     password: 123456
-    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+      database: MySQL
+      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+      show-sql: true
+      hibernate:
+        ddl-auto: update
 mybatis:
   typeAliasesPackage: com.warmer.kgmaker.entity
   mapperLocations: classpath*:/mapping/*.xml

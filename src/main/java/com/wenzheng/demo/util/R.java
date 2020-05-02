@@ -4,6 +4,7 @@ public class R<T> {
 	public int code;
 	public T data;
 	public String msg;
+	public int count;
 	
 	public int getCode(){
 		return this.code;
@@ -27,5 +28,13 @@ public class R<T> {
 	
 	public void setMsg(String msg) {
 		this.msg = msg;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 }

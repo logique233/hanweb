@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台首页 - QAdmin后台模板</title>
+    <link rel="stylesheet" href="/common/layui/css/layui.css">
+    <link rel="stylesheet" href="/admin/css/style.css">
+    <script src="/common/layui/layui.js"></script>
+    <script src="/common/jquery-3.3.1.min.js"></script>
+    <script src="/common/vue.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js" ></script>
+    <script src="https://cdn.bootcss.com/lodash.js/3.5.0/lodash.min.js" ></script>
+    <link href="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.js"></script>
+
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <style type="text/css">
+        .pl-20 {
+            padding-left: 20px
+        }
+
+        text {
+            cursor: pointer;
+            max-width: 25px;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+
+        circle {
+            cursor: pointer;
+        }
+
+        #graphcontainerdiv {
+            background: #fff;
+        }
+
+        .el-color-picker__panel {
+            left: 812px !important;
+        }
+
+        .wange-toolbar {
+            border: 1px solid #ccc;
+        }
+
+        .wangeditor-form {
+            border: 1px solid #ccc;
+            height: 350px;
+            min-height: 340px
+        }
+
+        .mind-fj-box {
+            display: inline-block;
+            width: 290px;
+            padding: 5px;
+            border: 1px solid #e6e6e6;
+            box-shadow: 0 0 8px rgba(206, 205, 201, .38);
+        }
+
+        .mind-fj-p {
+            color: #666;
+            line-height: 24px;
+            padding: 5px;
+            background: rgba(255, 255, 255, .85);
+        }
+
+        .mind-carousel + .mind-fj-p .el-scrollbar__wrap {
+            height: auto;
+            max-height: 220px;
+            min-height: 0;
+        }
+
+        .carous-img {
+            height: 100%;
+            background: rgba(0, 0, 0, .10);
+            line-height: 197px;
+            text-align: center;
+        }
+
+        .carous-img img {
+            max-width: 100%;
+            max-height: 100%;
+            line-height: 197px;
+            vertical-align: middle;
+        }
+
+        .circle_opreate {
+            display: none;
+        }
+
+        .node_detail {
+            position: absolute;
+            width: 100%;
+            line-height: 35px;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            padding-bottom: 10px;
+            background: rgba(198, 226, 255, 0.2);
+            display: none;
+        }
+
+        .node_pd {
+            padding: 4px;
+            font-size: 13px;
+            font-family: -webkit-body;
+            font-weight: 600;
+        }
+
+        .operatetips {
+            position: absolute;
+            right: 10px;
+            float: right;
+            top: 0;
+            width: 220px;
+            padding: 30px;
+            border: 2px #EE7942 solid;
+            border-radius: 4px;
+        }
+
+        .jsoncontainer {
+            position: absolute;
+            right: 30%;
+            float: right;
+            top: 0;
+            width: 60%;
+            height: 60%;
+            padding: 30px;
+            border: 2px #EE7942 solid;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .cypher_toolbar {
+            line-height: 70px;
+            height: 85px;
+            padding: 0 22px;
+            border-bottom: 1px solid #ededed;
+        }
+
+        .link {
+            fill: none;
+            stroke: #660f05;
+            stroke-width: 1.5px;
+        }
+    </style>
+    
+</head>
+<body>
+<div id="app">
+    <!--顶栏-->
+    <header>
+        <h1 v-text="webname"></h1>
+        <div class="breadcrumb">
+            <i class="layui-icon">&#xe715;</i>
+            <ul>
+                <li v-for="vo in address">
+                    <a  v-text="vo.name" :href="vo.url" ></a> <span>/</span>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="main" id="app">
+         <!--左栏-->
+         <div class="left">
+            <ul class="cl" >
+                <!--顶级分类-->
+                <li v-for="vo,index in menu" :class="{hidden:vo.hidden}">
+                    <a href="javascript:;"  :class="{active:vo.active}"  @click="onActive(index)">
+                        <i class="layui-icon" v-html="vo.icon"></i>
+                        <span v-text="vo.name"></span>
+                        <i class="layui-icon arrow" v-show="vo.url.length==0">&#xe61a;</i> <i v-show="vo.active" class="layui-icon active">&#xe623;</i>
+                    </a>
+                    <!--子级分类-->
+                    <div v-for="vo2,index2 in vo.list">
+                        <a href="javascript:;" :class="{active:vo2.active}" @click="onActive(index,index2)" v-text="vo2.name"></a>
+                        <i v-show="vo2.active" class="layui-icon active">&#xe623;</i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--右侧-->
+        <div class="right">
+            <div id="graphcontainer" class="graphcontainer"></div>
+        </div>
+    </div>
+</div>
+<script src="/admin/js/patientconfig.js"></script>
+<script src="/admin/js/patientscript.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js" ></script>
+</body>
+</html>

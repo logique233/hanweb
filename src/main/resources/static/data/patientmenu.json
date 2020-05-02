@@ -1,0 +1,33 @@
+[{
+    "name": "首页",
+    "icon": "&#xe68e;",
+    "url": "/patient/index",
+    "hidden": false,
+    "list": []
+},{
+    "name": "图谱",
+    "icon": "&#xe612;",
+    "url": "",
+    "hidden": false,
+    "list": [{
+        "name": "图谱",
+        "url": "/patient/queryGraph"
+    }]
+}, {
+    "name": "保留",
+    "icon": "&#xe653;",
+    "url": "",
+    "hidden": false,
+    "list": [{
+        "name": "设置",
+        "url": "/admin/base"
+    }, {
+        "name": "保留",
+        "url": "/admin/base"
+    }]
+},{
+    "name": "退出登录",
+    "icon": "&#xe65c;",
+    "url": "out.html",
+    "list": []
+}]
