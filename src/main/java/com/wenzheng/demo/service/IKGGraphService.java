@@ -42,6 +42,14 @@ public interface IKGGraphService {
 	HashMap<String, Object> getalldomaingraph(GraphQuery query);
 
 	/**
+	 * 查询图谱
+	 *
+	 * @param query
+	 * @return node relationship
+	 */
+	HashMap<String, Object> getalldomaingraphMode(GraphQuery query);
+
+	/**
 	 * 获取节点列表
 	 * 
 	 * @param domain

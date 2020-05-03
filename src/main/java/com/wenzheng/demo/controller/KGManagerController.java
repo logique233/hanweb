@@ -59,6 +59,23 @@ public class KGManagerController extends BaseController {
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/getdomaingraphMode")
+    public R<HashMap<String, Object>> getDomainGraphMode(GraphQuery query) {
+        R<HashMap<String, Object>> result = new R<HashMap<String, Object>>();
+        try {
+            HashMap<String, Object> graphData = KGGraphService.getalldomaingraphMode(query);
+            result.code = 200;
+            result.data = graphData;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.code = 500;
+            result.setMsg("服务器错误");
+        }
+        return result;
+    }
+
 	@ResponseBody
 	@RequestMapping(value = "/getalldomaingraph")
     public R<HashMap<String, Object>> getallDomainGraph(GraphQuery query) {

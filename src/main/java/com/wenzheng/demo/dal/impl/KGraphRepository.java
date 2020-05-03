@@ -179,6 +179,39 @@ public class KGraphRepository implements IKGraphRepository {
         return nr;
     }
 
+    @Override
+    public HashMap<String, Object> getalldomaingraphMode(GraphQuery query) {
+        HashMap<String, Object> nr = new HashMap<String, Object>();
+        try {
+            int pageSize = query.getPageSize();
+            // MATCH (n:`症状`) -[r]-(m:症状) where r.name='治疗' or r.name='危险因素' return n,m
+            if (pageSize >= 10) {
+                String cqr = "";
+                List<String> lis = new ArrayList<String>();
+
+                // 下边的查询查不到单个没有关系的节点,考虑要不要左箭头
+                String nodeSql = String.format("match data=(n:`mode`{name:\"挂号\"})-[*1..9]->(e)-[r]->(q) where e.name='%s' return data limit %s",query.getNodename(), query.getPageSize());
+                HashMap<String, Object> graphNode = neo4jUtil.GetGraphNodeAndShip(nodeSql);
+                Object node = graphNode.get("node");
+                // 没有关系显示则显示节点
+                if (node != null) {
+                    nr.put("node", graphNode.get("node"));
+                    nr.put("relationship", graphNode.get("relationship"));
+                } else {
+                    String nodecql = String.format("MATCH (n) RETURN distinct(n) limit %s",
+                            query.getPageSize());
+                    List<HashMap<String, Object>> nodeItem = neo4jUtil.GetGraphNode(nodecql);
+                    nr.put("node", nodeItem);
+                    nr.put("relationship", new ArrayList<HashMap<String, Object>>());
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nr;
+    }
+
     /**
      * 获取节点列表
      *
