@@ -15,6 +15,9 @@ var vue = new Vue({
     data: {
         webname: config.webname,
         menu: [],
+        id:"ff80818171d03e8b0171d03ea1ed0000",
+        ststus:"结束",
+        city:"",
         address: [],
         svg: null,
         // timer: null,
@@ -399,13 +402,13 @@ var vue = new Vue({
             _this.loading = true;
             var data = {
                 domain: _this.domain,
-                nodename: _this.nodename,
+                nodename: _this.ststus,
                 pageSize: _this.pagesize
             };
             $.ajax({
                 data: data,
                 type: "POST",
-                url: this.contextRoot + "getdomaingraph",
+                url: this.contextRoot + "getdomaingraphMode",
                 success: function (result) {
                     if (result.code == 200) {
                         var graphModel = result.data;
@@ -999,18 +1002,18 @@ var vue = new Vue({
             var fx = d.fx;
             var fy = d.fy;
             var ajaxdata = { domain: domain, uuid: uuid, fx: fx, fy: fy };
-            $.ajax({
-                data: ajaxdata,
-                type: "POST",
-                url: this.contextRoot + "updateCorrdOfNode",
-                success: function (result) {
-                    if (result.code == 200) {
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(errorThrown)
-                }
-            });
+            // $.ajax({
+            //     data: ajaxdata,
+            //     type: "POST",
+            //     url: this.contextRoot + "updateCorrdOfNode",
+            //     success: function (result) {
+            //         if (result.code == 200) {
+            //         }
+            //     },
+            //     error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //         alert(errorThrown)
+            //     }
+            // });
         },
         drawnode(node) {
             var _this = this;
@@ -1056,7 +1059,8 @@ var vue = new Vue({
                 clearTimeout(_this.timer);
             });
             nodeEnter.on("dblclick", function (d) {
-                app.updatenodename(d);// 双击更新节点名称
+                _this.updatenodename(d.name);// 双击更新节点名称
+                console.log(d);
             });
             nodeEnter.on("mouseenter", function (d) {
                 var aa = d3.select(this)._groups[0][0];
@@ -1397,41 +1401,19 @@ var vue = new Vue({
         },
         updatenodename(d) {
             var _this = this;
-            _this.$prompt('编辑节点名称', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                inputValue: d.name
-            }).then(function (res) {
-                value = res.value;
-                var data = { domain: _this.domain, nodeid: d.uuid, nodename: value };
+
+                var data = { ID: _this.id, Status:d };
                 $.ajax({
                     data: data,
                     type: "POST",
-                    url: this.contextRoot + "updatenodename",
+                    url: contextRoot + "patient/SetStatus",
                     success: function (result) {
-                        if (result.code == 200) {
-                            if (d.uuid != 0) {
-                                for (var i = 0; i < _this.graph.nodes.length; i++) {
-                                    if (_this.graph.nodes[i].uuid == d.uuid) {
-                                        _this.graph.nodes[i].name = value;
-                                    }
-                                }
-                            }
-                            _this.updategraph();
-                            _this.$message({
-                                message: '操作成功',
-                                type: 'success'
-                            });
-                        }
+                        _this.getdomaingraph();
+                        _this.updategraph();
                     }
                 });
-            }).catch(function () {
-                _this.$message({
-                    type: 'info',
-                    message: '取消操作'
-                });
-            });
         },
+
         resetsubmit() {
             this.isaddnode = false;
             this.isedit = false;

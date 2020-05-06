@@ -29,6 +29,13 @@ public class PatientController {
         return "patient_login";
     }
 
+    @RequestMapping("/queryGraph")
+    @GetMapping
+    public String patentqueryGraph(){
+        //TODO 患者登录
+        return "patient_graph";
+    }
+
     @RequestMapping("/login")
     @PostMapping
     @ResponseBody

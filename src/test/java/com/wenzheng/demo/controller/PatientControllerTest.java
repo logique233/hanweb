@@ -1,7 +1,7 @@
 package com.wenzheng.demo.controller;
 
-import com.wenzheng.demo.dal.IKGraphRepository;
-import com.wenzheng.demo.query.GraphQuery;
+
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class PatientControllerTest {
     @Autowired
-    IKGraphRepository ikGraphRepository;
-
+    com.wenzheng.demo.dal.modeRepository modeRepository;
     @Test
     void test() {
-        GraphQuery query = new GraphQuery();
-        query.setNodename("取药");
-        HashMap<String, Object> stringObjectHashMap = ikGraphRepository.getalldomaingraphMode(query);
-        System.out.println(stringObjectHashMap.toString());
+        System.out.println(modeRepository.findByName("结束"));
+//        HashMap<String, Object> result = modeSerivice.getModeGraph("结束");
+//        result.get("node").toString();
     }
 
 

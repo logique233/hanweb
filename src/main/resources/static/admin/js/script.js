@@ -860,6 +860,7 @@ var vue = new Vue({
                         case "DELETE":
                             _this.selectnodeid = d.uuid;
                             var out_buttongroup_id = '.out_buttongroup_' + i;
+                            console.log(out_buttongroup_id);
                             _this.deletenode(out_buttongroup_id);
                             break;
                     }
@@ -1079,6 +1080,7 @@ var vue = new Vue({
             });
             nodeEnter.on("dblclick", function (d) {
                 app.updatenodename(d);// 双击更新节点名称
+
             });
             nodeEnter.on("mouseenter", function (d) {
                 var aa = d3.select(this)._groups[0][0];
@@ -1285,7 +1287,7 @@ var vue = new Vue({
                 $.ajax({
                     data: data,
                     type: "POST",
-                    url: this.contextRoot + "deletenode",
+                    url: contextRoot + "deletenode",
                     success: function (result) {
                         if (result.code == 200) {
                             _this.svg.selectAll(out_buttongroup_id).remove();
