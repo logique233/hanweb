@@ -48,9 +48,22 @@
                     shade: 0.5,
                     time: 0,
                 });
-                setTimeout(function () {
-                    window.location.href = 'index.html';
-                },1000)
+                $.ajax({
+                    url: contextRoot+"patient/login",
+                    data: {
+                        name: data.field.user,
+                        password: data.field.pwd
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == '200') {
+                            setTimeout(function () {
+                                window.location.href = contextRoot+'patient/queryGraph';
+                            }, 1000)
+                        }
+                    }
+                });
+
 
                 return false;
             });
@@ -58,5 +71,9 @@
     </script>
 </div>
 </body>
+<script>
+    var contextRoot = "/";
+
+</script>
 
 </html>

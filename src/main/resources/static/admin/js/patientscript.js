@@ -397,12 +397,22 @@ var vue = new Vue({
                 }
             )
         },
+        getCookie(name)
+        {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+
+            if(arr=document.cookie.match(reg))
+
+                return unescape(arr[2]);
+            else
+                return null;
+        },
         getdomaingraph() {
             var _this = this;
             _this.loading = true;
             var data = {
                 domain: _this.domain,
-                nodename: _this.ststus,
+                nodename:$.cookie('STATUS'),
                 pageSize: _this.pagesize
             };
             $.ajax({
@@ -1060,6 +1070,8 @@ var vue = new Vue({
             });
             nodeEnter.on("dblclick", function (d) {
                 _this.updatenodename(d.name);// 双击更新节点名称
+                _this.getdomaingraph();
+                _this.updategraph();
                 console.log(d);
             });
             nodeEnter.on("mouseenter", function (d) {
@@ -1402,7 +1414,7 @@ var vue = new Vue({
         updatenodename(d) {
             var _this = this;
 
-                var data = { ID: _this.id, Status:d };
+                var data = { ID: $.cookie('ID'), Status:d };
                 $.ajax({
                     data: data,
                     type: "POST",

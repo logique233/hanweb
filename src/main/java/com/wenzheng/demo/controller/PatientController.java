@@ -54,10 +54,10 @@ public class PatientController {
                 Cookie cookieID = new Cookie("ID", user.getId());
                 Cookie cookieStatus = new Cookie("STATUS", user.getStatus());
                 cookieID.setMaxAge(7 * 24 * 60 * 60);
-                cookieID.setHttpOnly(true);
+//                cookieID.setHttpOnly(true);
                 cookieID.setPath("/");
                 cookieStatus.setMaxAge(7 * 24 * 60 * 60);
-                cookieStatus.setHttpOnly(true);
+//                cookieStatus.setHttpOnly(true);
                 cookieStatus.setPath("/");
                 response.addCookie(cookieID);
                 response.addCookie(cookieStatus);
@@ -109,7 +109,7 @@ public class PatientController {
             Cookie cookie = new Cookie("STATUS", status);
             cookie.setMaxAge(7 * 24 * 60 * 60);
 //            cookie.setSecure(true);
-            cookie.setHttpOnly(true);
+//            cookie.setHttpOnly(true);
             cookie.setPath("/");
             response.addCookie(cookie);
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class PatientController {
                 Cookie cookie = new Cookie("STATUS", Status);
                 cookie.setMaxAge(7 * 24 * 60 * 60);
 //            cookie.setSecure(true);
-                cookie.setHttpOnly(true);
+//                cookie.setHttpOnly(true);
                 cookie.setPath("/");
                 response.addCookie(cookie);
             }

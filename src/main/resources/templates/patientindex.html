@@ -76,6 +76,16 @@
 </div>
 <script src="/admin/js/patientconfig.js"></script>
 <script src="/admin/js/patientscript.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<script
+        type="module"
+        src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.mjs"
+></script>
+<script>
+    var contextRoot = "/";
+    var ID=Cookies.get('ID');
+    var STATUS=Cookies.get('STATUS');
+</script>
 <script type="text/javascript">
 
     // //模拟登录状态,实际使用时请删除掉
