@@ -28,10 +28,11 @@
         </div>
         <div class="layui-form-item">
             <button style="width: 100%" class="layui-btn" lay-submit lay-filter="login">立即登录</button>
-
         </div>
     </form>
-
+    <div class="layui-form-item site-demo-button" id="layerDemo">
+        <button data-method="offset" style="width: 100%" class="layui-btn">注册</button>
+    </div>
     <script>
 
 
@@ -67,6 +68,66 @@
 
                 return false;
             });
+        });
+    </script>
+
+    <script>
+        layui.use('layer', function () { //独立版的layer无需执行这一句
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+            //触发事件
+            var active = {
+
+                offset: function (othis) {
+                    var type = 1
+                        , text = othis.text();
+
+                    layer.open({
+                        type: 2
+                        , offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                        , id: 'layerDemo' + type //防止重复弹出
+                        , content: "/patient/from"
+                        , btn: '注册'
+                        , area: ['700px', '400px']
+                        , btnAlign: 'c' //按钮居中
+                        , shade: 0 //不显示遮罩
+                        , yes: function (index, layero) {
+                            var body = top.layer.getChildFrame('body', index);
+                            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+
+                            $.ajax({
+                                url: "/patient/registered",
+                                type: 'post',
+                                data: {
+                                    username: body.find('#name').val(),
+                                    password: body.find('#password').val(),
+                                    email: body.find('#empEmail').val(),
+                                    city: body.find('#city').val(),
+                                    sex: body.find('input[name="empSex"]:checked').val(),
+                                    status: "挂号"
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        layer.closeAll();
+                                    } else if (data.code == 500) {
+                                        layer.msg(data.msg, {
+                                            icon: 2,
+                                            time: 1000
+                                        }, function () { });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            };
+
+            $('#layerDemo .layui-btn').on('click', function () {
+                var othis = $(this), method = othis.data('method');
+                active[method] ? active[method].call(this, othis) : '';
+            });
+
         });
     </script>
 </div>

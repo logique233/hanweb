@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>登陆 </title>
+    <link rel="stylesheet" href="/common/layui/css/layui.css">
+    <link rel="stylesheet" href="/admin/css/login.css">
+    <script src="/common/layui/layui.js"></script>
+    <script src="/common/jquery-3.3.1.min.js"></script>
+    <script src="/common/vue.min.js"></script>
+    <script src="/admin/js/config.js"></script>
+    <script src="/admin/js/script.js"></script>
+</head>
+<body>
+<div class="layui-row" id="test">
+    <div class="layui-col-md10">
+        <form class="layui-form" id="addEmployeeForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="empName" id="name" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="empSex" value="男" title="男" checked>
+                    <input type="radio" name="empSex" value="女" title="女">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="empEmail" id="empEmail" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">城市：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="city" id="city" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码：</label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" id="password" class="layui-input">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

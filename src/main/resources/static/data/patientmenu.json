@@ -21,9 +21,6 @@
     "list": [{
         "name": "设置",
         "url": "/admin/base"
-    }, {
-        "name": "保留",
-        "url": "/admin/base"
     }]
 },{
     "name": "退出登录",

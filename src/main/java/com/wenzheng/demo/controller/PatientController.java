@@ -32,6 +32,13 @@ public class PatientController {
         return "patient_login";
     }
 
+    @RequestMapping("/from")
+    @GetMapping
+    public String patentfrom(){
+        //TODO 患者登录
+        return "from";
+    }
+
     @RequestMapping("/queryGraph")
     @GetMapping
     public String patentqueryGraph(){
