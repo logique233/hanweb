@@ -9,7 +9,7 @@ import java.util.List;
 public interface modeRepository extends Neo4jRepository<mode, Long> {
     mode findByName(String name);
 
-    @Query("match data=(n:`mode`{name:'挂号'})-[*1..9]->(e)-[r]-(q) where e.name={0} return data")
+    @Query("match data=(n:`mode`{name:'挂号'})-[*1..9]->(e)-[r]-(q) where e.name=$0 return data")
     List<mode> getModesByName(String name);
 
     List<mode> findAll();
