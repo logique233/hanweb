@@ -19,8 +19,8 @@
     "url": "",
     "hidden": false,
     "list": [{
-        "name": "设置",
-        "url": "/admin/base"
+        "name": "保留",
+        "url": "/patient/index"
     }]
 },{
     "name": "退出登录",
