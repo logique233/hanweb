@@ -16,7 +16,7 @@ public interface modeRepository extends Neo4jRepository<mode, Long> {
 
     mode findById(long id);
 
-    @Query("MATCH DATA=(M)-[R]-(N) WHERE ID(M)={0} RETURN DATA")
+    @Query("MATCH DATA=(M)-[R]-(N) WHERE ID(M)=$0 RETURN DATA")
     List<mode> getById(long id);
 
     void deleteById(long id);
