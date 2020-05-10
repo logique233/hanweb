@@ -25,7 +25,7 @@ public class PatientController {
     @Resource
     PatirntService patirntService;
 
-    @RequestMapping("/loginView")
+    @RequestMapping("/")
     @GetMapping
     public String patentLoginview(){
         //TODO 患者登录
@@ -78,7 +78,7 @@ public class PatientController {
     }
 
 
-    @RequestMapping({"/index","/"})
+    @RequestMapping("/index")
     @PostMapping
     public String patentIndex(){
         //TODO 患者登录
