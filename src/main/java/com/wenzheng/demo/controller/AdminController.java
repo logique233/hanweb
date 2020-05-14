@@ -60,5 +60,12 @@ public class AdminController {
         return adminService.quarygraph();
     }
 
+    @RequestMapping("login")
+    @GetMapping
+    public String login() {
+        //TODO 查询知识图谱
+        return "login";
+    }
+
 
 }
