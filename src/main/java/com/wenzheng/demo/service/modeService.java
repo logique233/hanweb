@@ -73,6 +73,7 @@ public class modeService {
         HashMap<String, Object> result = new HashMap<>();
         mode mode = modeRepository.findById(entity.getUuid());
         mode.setName(entity.getName());
+        mode.setColor(entity.getColor());
         modeRepository.save(mode);
         mode = modeRepository.findByName(entity.getName());
         result.put("r", mode.getR());
