@@ -53,7 +53,7 @@ public class modeService {
                 HashMap<String, Object> rships = new HashMap<String, Object>();
                 rships.put("sourceid", String.valueOf(modenext.getStart().getId()));
                 rships.put("targetid", String.valueOf(modenext.getEnd().getId()));
-                rships.put("name", "RE");
+                rships.put("name", String.valueOf(modenext.getEnd().getName()));
                 rships.put("uuid", String.valueOf(modenext.getId()));
                 ships.add(rships);
             }
