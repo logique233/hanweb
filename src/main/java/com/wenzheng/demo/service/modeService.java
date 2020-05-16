@@ -136,4 +136,14 @@ public class modeService {
         return result;
     }
 
+    public HashMap<String, Object> updatelink(long shipid, String shipname) {
+        modeRepository.updatelink(shipid, shipname);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", shipname);
+        result.put("sourceid", shipid);
+        result.put("uuid", shipid);
+        result.put("targetid", shipid);
+
+        return result;
+    }
 }

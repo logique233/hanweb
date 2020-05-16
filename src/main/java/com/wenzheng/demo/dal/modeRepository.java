@@ -20,4 +20,7 @@ public interface modeRepository extends Neo4jRepository<mode, Long> {
     List<mode> getById(long id);
 
     void deleteById(long id);
+
+    @Query("MATCH (n)-[r]-(e) where ID(r)=$0 set r.name=$1")
+    void updatelink(long shipid, String shipname);
 }

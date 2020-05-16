@@ -19,9 +19,7 @@ class PatientControllerTest {
     com.wenzheng.demo.dal.modeRepository modeRepository;
     @Test
     void test() {
-        System.out.println(modeRepository.findByName("结束"));
-//        HashMap<String, Object> result = modeSerivice.getModeGraph("结束");
-//        result.get("node").toString();
+       modeRepository.updatelink(81,"name");
     }
 
 

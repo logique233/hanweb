@@ -335,21 +335,21 @@ public class KGManagerController extends BaseController {
 //        return result;
 //    }
 //
-//    @ResponseBody
-//    @RequestMapping(value = "/updatelink")
-//    public R<HashMap<String, Object>> updatelink(String domain, long shipid, String shipname) {
-//        R<HashMap<String, Object>> result = new R<HashMap<String, Object>>();
-//        try {
-//            HashMap<String, Object> cypherResult = KGGraphService.updatelink(domain, shipid, shipname);
-//            result.code = 200;
-//            result.setData(cypherResult);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            result.code = 500;
-//            result.setMsg("服务器错误");
-//        }
-//        return result;
-//    }
+    @ResponseBody
+    @RequestMapping(value = "/updatelink")
+    public R<HashMap<String, Object>> updatelink(String domain, long shipid, String shipname) {
+        R<HashMap<String, Object>> result = new R<HashMap<String, Object>>();
+        try {
+            HashMap<String, Object> cypherResult = modeService.updatelink(shipid, shipname);
+            result.code = 200;
+            result.setData(cypherResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.code = 500;
+            result.setMsg("服务器错误");
+        }
+        return result;
+    }
 //
     @ResponseBody
     @RequestMapping(value = "/deletenode")
